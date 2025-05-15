@@ -6,6 +6,7 @@ const [task, settask] = useState('')
 const [des, setdes] = useState('')
 const [newtask, setnewtask] = useState([])
 const [edit, setedit] = useState(null)
+const [search, setsearch] = useState(null)
 
 
   const submithandler = (e) => {
@@ -46,8 +47,27 @@ const  edithandler = (i) => {
 
 }
 
-  return (
+
+const filterdTask = newtask.filter((t)=> {
+  if(search == null){
+    return t
+  }
+  else if(t.task.toLowerCase().includes(search.toLowerCase()) || t.des.toLowerCase().includes(search.toLowerCase())){
+    return t
+  }
+  else{
+    return null
+  } 
+})
+  return (   
     <div className=' w-screen h-screen bg-zinc-900 text-2xl font-bold px-6 py-4 text-white'>
+
+<div className='flex items-center justify-center m-8 px-3'>
+  <input onChange={(e) => {
+    setsearch(e.target.value)
+  }} className='px-3 py-1 rounded' type='search' placeholder='Enter the Task'/>
+</div>
+
       <form onSubmit={submithandler}>
             <input value={task} onChange={(e) => {
               settask(e.target.value)
@@ -64,7 +84,7 @@ const  edithandler = (i) => {
 
  <div className='w-50 m-4 gap-4 px-4 py-2 flex items-center justify-center flex-col text-center'>
   {newtask.length > 0 ? (
-    newtask.map((t, i)=> {
+    filterdTask.map((t, i)=> {
     return (
       <div key={i} className='border-2 border-emerald-100 rounded px-4 py-2 m-4'>
         <h1 className='text-xl font-bold'>{t.task}</h1>
